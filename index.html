@@ -444,7 +444,6 @@
 </div>
 
 <script>
-  // === МОДАЛЬНОЕ ОКНО ===
   const modal = document.getElementById('infoModal');
   const modalTitle = document.getElementById('modalTitle');
   const modalText = document.getElementById('modalText');
@@ -454,7 +453,6 @@
   }
   function closeModal(e) { if (e) e.stopPropagation(); modal.classList.remove('active'); }
 
-  // === ПЕРЕКЛЮЧЕНИЕ СЛАЙДОВ ===
   let currentSlide = 0;
   const slides = document.querySelectorAll('.slide');
   const progress = document.getElementById('progress');
@@ -508,29 +506,23 @@
 
   updateUI();
 
-  // === 3D-ЭФФЕКТ ДЛЯ КАРТОЧЕК (TILT) ===
   const cards = document.querySelectorAll('.card');
   cards.forEach(card => {
     card.addEventListener('mousemove', e => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      
       const rotateX = ((y - centerY) / centerY) * -10;
       const rotateY = ((x - centerX) / centerX) * 10;
-      
       card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
     });
-    
     card.addEventListener('mouseleave', () => {
       card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
     });
   });
 
-  // === КОСМИЧЕСКАЯ НЕЙРОСЕТЬ ===
   const canvas = document.getElementById('bg');
   const ctx = canvas.getContext('2d');
   let W, H, particles = [];
@@ -585,3 +577,4 @@
 </script>
 </body>
 </html>
+
