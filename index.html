@@ -8,23 +8,46 @@
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap');
 
   :root {
-    --bg: #050814; --primary: #0052ff; --accent: #00f0ff; --pink: #ff007f; --text: #ffffff; --muted: #8fa0b5;
+    --bg: #040710;
+    --primary: #0052ff;
+    --accent: #00f0ff;
+    --pink: #ff007f;
+    --gold: #ffd700;
+    --text: #ffffff;
+    --muted: #8fa0b5;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-  body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
+  body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; perspective: 1000px; }
   
+  /* ===== ИНТЕРЕСНЫЙ ФОН ===== */
   canvas#bg { position: fixed; inset: 0; z-index: 0; opacity: 0.6; }
   
-  .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: 0; opacity: 0.5; animation: float 10s infinite alternate; }
-  .orb-1 { width: 400px; height: 400px; background: rgba(0, 82, 255, 0.4); top: -100px; left: -100px; }
-  .orb-2 { width: 300px; height: 300px; background: rgba(255, 0, 127, 0.3); bottom: -50px; right: -50px; animation-delay: -5s; }
-  @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
+  /* Неоновая сетка */
+  .grid-bg {
+    position: fixed; inset: -50%; z-index: 0; pointer-events: none;
+    background-image: 
+      linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: rotateX(60deg) translateY(-100px);
+    animation: gridMove 10s linear infinite;
+  }
+  @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 0 50px; } }
 
+  /* Плавающие сферы */
+  .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: 0; opacity: 0.6; animation: float 12s infinite alternate ease-in-out; }
+  .orb-1 { width: 400px; height: 400px; background: rgba(0, 82, 255, 0.4); top: -100px; left: -100px; }
+  .orb-2 { width: 350px; height: 350px; background: rgba(255, 0, 127, 0.3); bottom: -50px; right: -50px; animation-delay: -5s; }
+  .orb-3 { width: 250px; height: 250px; background: rgba(0, 240, 255, 0.2); top: 40%; left: 40%; animation-delay: -2s; }
+  @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 40px) scale(1.1); } }
+
+  /* ===== СЛАЙДЫ ===== */
   .presentation { position: relative; width: 100%; height: 100%; z-index: 1; }
-  .slide { position: absolute; inset: 0; padding: 5vh 8vw; display: flex; flex-direction: column; justify-content: center; opacity: 0; transform: scale(0.95); visibility: hidden; transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s; }
-  .slide.active { opacity: 1; transform: scale(1); visibility: visible; }
+  .slide { position: absolute; inset: 0; padding: 5vh 8vw; display: flex; flex-direction: column; justify-content: center; opacity: 0; transform: scale(1.05); filter: blur(10px); visibility: hidden; transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .slide.active { opacity: 1; transform: scale(1); filter: blur(0); visibility: visible; }
   
+  /* Анимации появления */
   .anim-up { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .anim-left { opacity: 0; transform: translateX(-50px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .slide.active .anim-up { opacity: 1; transform: translateY(0); }
@@ -32,52 +55,57 @@
   
   .d-1 { transition-delay: 0.2s; } .d-2 { transition-delay: 0.4s; } .d-3 { transition-delay: 0.6s; } .d-4 { transition-delay: 0.8s; }
 
-  h1 { font-size: clamp(3rem, 6vw, 5rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 40px rgba(0, 240, 255, 0.3); }
+  /* Типографика */
+  h1 { font-size: clamp(3rem, 6vw, 5rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; background: linear-gradient(90deg, #fff, var(--accent), #fff); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
+  @keyframes shine { to { background-position: 200% center; } }
   h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; margin-bottom: 30px; color: var(--accent); text-shadow: 0 0 20px rgba(0, 240, 255, 0.5); }
   p { font-size: clamp(1rem, 1.5vw, 1.3rem); color: var(--muted); line-height: 1.6; max-width: 800px; }
   
   .highlight { color: var(--pink); font-weight: 700; text-shadow: 0 0 15px rgba(255, 0, 127, 0.5); }
   .subtitle { font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; color: var(--primary); font-weight: 700; margin-bottom: 15px; }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
-  
+  /* ===== КАРТОЧКИ С 3D-ЭФФЕКТОМ ===== */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 30px; perspective: 1000px; }
   .card { 
     background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); 
     padding: 25px; border-radius: 20px; backdrop-filter: blur(10px);
     transition: all 0.3s ease; position: relative; overflow: hidden;
     display: flex; flex-direction: column; cursor: pointer;
+    transform-style: preserve-3d;
   }
-  .card:hover { transform: translateY(-5px); border-color: rgba(0, 240, 255, 0.5); box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15); background: rgba(255,255,255,0.05); }
-  .card .icon { font-size: 2.2rem; margin-bottom: 10px; text-shadow: 0 0 20px currentColor; }
-  .card h3 { font-size: 1.3rem; margin-bottom: 8px; color: #fff; }
-  .card p { font-size: 0.9rem; flex-grow: 1; margin-bottom: 15px; }
+  .card:hover { border-color: rgba(0, 240, 255, 0.5); box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15); background: rgba(255,255,255,0.05); }
+  .card .icon { font-size: 2.2rem; margin-bottom: 10px; text-shadow: 0 0 20px currentColor; transform: translateZ(20px); }
+  .card h3 { font-size: 1.3rem; margin-bottom: 8px; color: #fff; transform: translateZ(15px); }
+  .card p { font-size: 0.9rem; flex-grow: 1; margin-bottom: 15px; transform: translateZ(10px); }
   
-  .hint-text { font-size: 0.75rem; color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; transition: opacity 0.3s; }
+  .hint-text { font-size: 0.75rem; color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; transition: opacity 0.3s; transform: translateZ(5px); }
   .card:hover .hint-text { opacity: 1; text-shadow: 0 0 10px var(--accent); }
 
+  /* Статистика */
   .stats-grid { display: flex; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
   .stat-item { flex: 1; min-width: 200px; text-align: center; background: rgba(0,0,0,0.3); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
   .stat-number { font-size: 4rem; font-weight: 900; color: var(--pink); text-shadow: 0 0 30px rgba(255,0,127,0.6); margin-bottom: 10px; }
   .stat-label { font-size: 1.1rem; color: var(--muted); }
 
+  /* Управление */
   .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: var(--accent); width: 0%; transition: width 0.4s ease; z-index: 10; box-shadow: 0 0 15px var(--accent); }
   .controls { position: fixed; bottom: 30px; right: 40px; display: flex; gap: 15px; z-index: 10; }
   .btn { width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px); transition: all 0.3s; }
   .btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); transform: scale(1.1); }
   .slide-counter { position: fixed; bottom: 40px; left: 40px; font-size: 1.2rem; color: var(--muted); font-weight: 700; letter-spacing: 2px; z-index: 10; }
 
+  /* Специфичные визуалы */
   .center-content { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
   .split-layout { display: flex; align-items: center; gap: 50px; }
   .split-layout > div { flex: 1; }
   
-  /* Визуальные эффекты */
   .glowing-circle { width: 250px; height: 250px; border-radius: 50%; border: 2px dashed var(--accent); display: flex; justify-content: center; align-items: center; animation: spin 20s linear infinite; margin: 0 auto; box-shadow: inset 0 0 50px rgba(0,240,255,0.2), 0 0 50px rgba(0,240,255,0.2); }
   .glowing-circle-inner { width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, var(--primary), transparent); animation: pulse 3s ease-in-out infinite; }
   
   .shield { width: 200px; height: 220px; background: rgba(0, 255, 136, 0.1); border: 3px solid #00ff88; border-radius: 0 0 100px 100px; margin: 0 auto; box-shadow: 0 0 40px rgba(0, 255, 136, 0.4), inset 0 0 30px rgba(0, 255, 136, 0.3); animation: shieldPulse 2s infinite alternate; position: relative; }
   .shield::after { content: '🛡️'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 5rem; filter: drop-shadow(0 0 15px #00ff88); }
   
-  .hexagon { width: 200px; height: 230px; background: rgba(255, 0, 127, 0.1); border: 3px solid var(--pink); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); margin: 0 auto; box-shadow: 0 0 50px rgba(255, 0, 127, 0.5); animation: pulse 2s infinite; position: relative; display: flex; align-items: center; justify-content: center; }
+  .hexagon { width: 200px; height: 230px; background: rgba(255, 0, 127, 0.1); border: 3px solid var(--pink); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); margin: 0 auto; box-shadow: 0 0 50px rgba(255, 0, 127, 0.5); animation: pulse 2s infinite; display: flex; align-items: center; justify-content: center; }
   .hexagon-text { font-size: 1.5rem; font-weight: bold; color: #fff; text-align: center; text-shadow: 0 0 10px var(--pink); }
 
   @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -112,10 +140,13 @@
 <body>
 
 <canvas id="bg"></canvas>
+<div class="grid-bg"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
 <div class="progress-bar" id="progress"></div>
-<div class="slide-counter" id="counter">01 / 16</div>
+<div class="slide-counter" id="counter">01 / 21</div>
 
 <div class="presentation">
   
@@ -130,13 +161,13 @@
   <div class="slide" data-slide="1">
     <h2 class="anim-left d-1">Вызовы Традиционного Банкинга</h2>
     <div class="grid">
-      <div class="card anim-up d-2" onclick="openModal('Проблема медлительности', '<p>Традиционные банки используют устаревшие ИТ-системы, которые обрабатывают данные вручную.</p><ul><li><strong>Кредиты:</strong> Одобрение может занимать от 3 до 14 дней из-за ручной проверки.</li><li><strong>Решение:</strong> Автоматизация процессов и скоринг на базе ИИ сокращают время до 2-3 минут.</li></ul>')">
+      <div class="card anim-up d-2 tilt" onclick="openModal('Проблема медлительности', '<p>Традиционные банки используют устаревшие ИТ-системы, которые обрабатывают данные вручную.</p><ul><li><strong>Кредиты:</strong> Одобрение может занимать от 3 до 14 дней из-за ручной проверки.</li><li><strong>Решение:</strong> Автоматизация процессов и скоринг на базе ИИ сокращают время до 2-3 минут.</li></ul>')">
         <div class="icon" style="color: #ff4444;">⏳</div><h3>Медлительность</h3><p>Очереди, бумажная волокита и ожидание неделями.</p><div class="hint-text">Нажми, чтобы узнать больше +</div>
       </div>
-      <div class="card anim-up d-3" onclick="openModal('Географическая привязка', '<p>Физические отделения — это огромные затраты на аренду и персонал.</p><ul><li><strong>Проблема:</strong> В отдаленных районах доступ к финансам ограничен.</li><li><strong>Решение:</strong> Мобильные приложения стирают границы. Банк доступен 24/7 по всему миру.</li></ul>')">
+      <div class="card anim-up d-3 tilt" onclick="openModal('Географическая привязка', '<p>Физические отделения — это огромные затраты на аренду и персонал.</p><ul><li><strong>Проблема:</strong> В отдаленных районах доступ к финансам ограничен.</li><li><strong>Решение:</strong> Мобильные приложения стирают границы. Банк доступен 24/7 по всему миру.</li></ul>')">
         <div class="icon" style="color: #ffbb00;">📍</div><h3>География</h3><p>Привязка к отделениям. Банк должен быть в кармане.</p><div class="hint-text">Нажми, чтобы узнать больше +</div>
       </div>
-      <div class="card anim-up d-4" onclick="openModal('Операционные издержки', '<p>Каждое физическое отделение — дорогостоящий актив.</p><ul><li><strong>Инкассация:</strong> Требует дорогой логистики и охраны.</li><li><strong>Эффект цифровизации:</strong> Перевод 90% операций в онлайн снижает издержки на 40-50%.</li></ul>')">
+      <div class="card anim-up d-4 tilt" onclick="openModal('Операционные издержки', '<p>Каждое физическое отделение — дорогостоящий актив.</p><ul><li><strong>Инкассация:</strong> Требует дорогой логистики и охраны.</li><li><strong>Эффект цифровизации:</strong> Перевод 90% операций в онлайн снижает издержки на 40-50%.</li></ul>')">
         <div class="icon" style="color: #ff4444;">💸</div><h3>Высокие издержки</h3><p>Содержание штата и офисов бьет по себестоимости.</p><div class="hint-text">Нажми, чтобы узнать больше +</div>
       </div>
     </div>
@@ -156,13 +187,13 @@
     <h2 class="anim-left d-1">Мобильный Банкинг</h2>
     <p class="anim-left d-2">Приложение как основной интерфейс взаимодействия с клиентом.</p>
     <div class="grid">
-      <div class="card anim-up d-3" onclick="openModal('Доступ 24/7', '<p>Мобильный банк работает без выходных.</p><ul><li>Оплата ЖКХ или блокировка карты в 3 часа ночи.</li><li>Push-уведомления обеспечивают финансовый контроль.</li><li>Чат-боты решают 80% вопросов за секунды.</li></ul>')">
+      <div class="card anim-up d-3 tilt" onclick="openModal('Доступ 24/7', '<p>Мобильный банк работает без выходных.</p><ul><li>Оплата ЖКХ или блокировка карты в 3 часа ночи.</li><li>Push-уведомления обеспечивают финансовый контроль.</li><li>Чат-боты решают 80% вопросов за секунды.</li></ul>')">
         <div class="icon" style="color: var(--accent);">📱</div><h3>24/7 Доступ</h3><p>Любые операции в любое время.</p><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-4" onclick="openModal('СБП', '<p>Система Быстрых Платежей — прорыв в рознице.</p><ul><li>Переводы по номеру телефона.</li><li>Оплата по QR без карты.</li><li>Переводы между банками за 3 секунды без комиссии.</li></ul>')">
+      <div class="card anim-up d-4 tilt" onclick="openModal('СБП', '<p>Система Быстрых Платежей — прорыв в рознице.</p><ul><li>Переводы по номеру телефона.</li><li>Оплата по QR без карты.</li><li>Переводы между банками за 3 секунды без комиссии.</li></ul>')">
         <div class="icon" style="color: var(--accent);">⚡</div><h3>СБП</h3><p>Мгновенные переводы без реквизитов.</p><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-4" onclick="openModal('Виртуальные Карты', '<p>Идеально для безопасных покупок.</p><ul><li>Одноразовые карты для подозрительных сервисов.</li><li>Удобно привязывать к подпискам.</li><li>Выпуск за 10 секунд.</li></ul>')">
+      <div class="card anim-up d-4 tilt" onclick="openModal('Виртуальные Карты', '<p>Идеально для безопасных покупок.</p><ul><li>Одноразовые карты для подозрительных сервисов.</li><li>Удобно привязывать к подпискам.</li><li>Выпуск за 10 секунд.</li></ul>')">
         <div class="icon" style="color: var(--accent);">💳</div><h3>Виртуальные Карты</h3><p>Выпуск карты в один клик.</p><div class="hint-text">Нажми +</div>
       </div>
     </div>
@@ -171,13 +202,13 @@
   <div class="slide" data-slide="4">
     <h2 class="anim-left d-1">Искусственный Интеллект</h2>
     <div class="grid">
-      <div class="card anim-up d-2" onclick="openModal('ИИ в Скоринге', '<p>Оценка кредитоспособности на основе Big Data.</p><ul><li>Анализ платежной дисциплины и поведения.</li><li>Решение за 1-2 минуты.</li><li>Снижение дефолтов с 10% до 3%.</li></ul>')">
+      <div class="card anim-up d-2 tilt" onclick="openModal('ИИ в Скоринге', '<p>Оценка кредитоспособности на основе Big Data.</p><ul><li>Анализ платежной дисциплины и поведения.</li><li>Решение за 1-2 минуты.</li><li>Снижение дефолтов с 10% до 3%.</li></ul>')">
         <div class="icon" style="color: #b33cff;">🧠</div><h3>Скоринг</h3><p>Одобрение кредитов за минуты.</p><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-3" onclick="openModal('Чат-боты', '<p>Виртуальные ассистенты экономят время.</p><ul><li>Бот понимает свободную речь (NLP).</li><li>Голосовое управление счетами.</li><li>Перевод сложных вопросов оператору.</li></ul>')">
+      <div class="card anim-up d-3 tilt" onclick="openModal('Чат-боты', '<p>Виртуальные ассистенты экономят время.</p><ul><li>Бот понимает свободную речь (NLP).</li><li>Голосовое управление счетами.</li><li>Перевод сложных вопросов оператору.</li></ul>')">
         <div class="icon" style="color: #b33cff;">🤖</div><h3>Чат-боты</h3><p>Решение 80% рутинных вопросов.</p><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-4" onclick="openModal('Гиперперсонализация', '<p>Банк знает о ваших тратах больше вас.</p><ul><li>Умный кэшбэк на любимые категории.</li><li>Предложение инвестиций при накоплении суммы.</li></ul>')">
+      <div class="card anim-up d-4 tilt" onclick="openModal('Гиперперсонализация', '<p>Банк знает о ваших тратах больше вас.</p><ul><li>Умный кэшбэк на любимые категории.</li><li>Предложение инвестиций при накоплении суммы.</li></ul>')">
         <div class="icon" style="color: #b33cff;">🎯</div><h3>Персонализация</h3><p>Предложение идеальных продуктов.</p><div class="hint-text">Нажми +</div>
       </div>
     </div>
@@ -185,10 +216,10 @@
 
   <div class="slide" data-slide="5">
     <div class="center-content">
-      <h2 class="anim-up d-1" style="color: #ffd700; text-shadow: 0 0 30px rgba(255,215,0,0.5);">Блокчейн</h2>
-      <h1 class="anim-up d-2" style="font-size: clamp(2rem, 4vw, 3.5rem); background: linear-gradient(90deg, #ffd700, #ff8c00); -webkit-background-clip: text;">Прозрачность и Безопасность</h1>
+      <h2 class="anim-up d-1" style="color: var(--gold); text-shadow: 0 0 30px rgba(255,215,0,0.5);">Блокчейн</h2>
+      <h1 class="anim-up d-2" style="font-size: clamp(2rem, 4vw, 3.5rem); background: linear-gradient(90deg, var(--gold), #ff8c00); -webkit-background-clip: text;">Прозрачность и Безопасность</h1>
       <p class="anim-up d-3">Смарт-контракты и распределенные реестры исключают подделку транзакций.</p>
-      <div class="card anim-up d-4" style="margin-top: 30px; max-width: 600px; text-align: left;" onclick="openModal('Технология Блокчейн', '<p>База данных в виде цепочки блоков.</p><ul><li><strong>Смарт-контракты:</strong> Автовыплата страховки при задержке рейса.</li><li><strong>Безопасность:</strong> Данные невозможно подделать.</li><li><strong>Трансграничные платежи:</strong> Минуты вместо дней.</li></ul>')">
+      <div class="card anim-up d-4 tilt" style="margin-top: 30px; max-width: 600px; text-align: left;" onclick="openModal('Технология Блокчейн', '<p>База данных в виде цепочки блоков.</p><ul><li><strong>Смарт-контракты:</strong> Автовыплата страховки при задержке рейса.</li><li><strong>Безопасность:</strong> Данные невозможно подделать.</li><li><strong>Трансграничные платежи:</strong> Минуты вместо дней.</li></ul>')">
         <h3 style="font-size: 1.2rem;">Как это работает?</h3><div class="hint-text">Нажми, чтобы узнать больше +</div>
       </div>
     </div>
@@ -198,13 +229,13 @@
     <h2 class="anim-left d-1">Биометрическая Защита</h2>
     <p class="anim-left d-2">Безопасность на уровне вашего лица и голоса.</p>
     <div class="grid">
-      <div class="card anim-up d-3" onclick="openModal('Face ID', '<p>3D-сканирование лица за 0.5 секунды.</p><ul><li>ИИ отличает фото от реального лица.</li><li>Удаленное открытие счета по камере.</li></ul>')">
+      <div class="card anim-up d-3 tilt" onclick="openModal('Face ID', '<p>3D-сканирование лица за 0.5 секунды.</p><ul><li>ИИ отличает фото от реального лица.</li><li>Удаленное открытие счета по камере.</li></ul>')">
         <div class="icon" style="color: #00ff88;">👤</div><h3>Face ID</h3><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-4" onclick="openModal('Touch ID', '<p>Дактилоскопия для подтверждения сумм.</p><ul><li>Защита от подглядывания паролей.</li></ul>')">
+      <div class="card anim-up d-4 tilt" onclick="openModal('Touch ID', '<p>Дактилоскопия для подтверждения сумм.</p><ul><li>Защита от подглядывания паролей.</li></ul>')">
         <div class="icon" style="color: #00ff88;">👆</div><h3>Touch ID</h3><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-4" onclick="openModal('Голос', '<p>Анализ тембра в колл-центрах.</p><ul><li>Выявление мошенников по интонациям.</li><li>Экономия времени разговора на 30%.</li></ul>')">
+      <div class="card anim-up d-4 tilt" onclick="openModal('Голос', '<p>Анализ тембра в колл-центрах.</p><ul><li>Выявление мошенников по интонациям.</li><li>Экономия времени разговора на 30%.</li></ul>')">
         <div class="icon" style="color: #00ff88;">🗣️</div><h3>Голосовой слепок</h3><div class="hint-text">Нажми +</div>
       </div>
     </div>
@@ -212,7 +243,7 @@
 
   <div class="slide" data-slide="7">
     <div class="split-layout">
-      <div class="anim-left d-1" onclick="openModal('Геймификация', '<p>Финансы как игра.</p><ul><li>Кэшбэк-квесты за покупки.</li><li>Округление покупок в копилку.</li><li>Уровни лояльности (Platinum, Gold).</li></ul>')">
+      <div class="anim-left d-1 tilt" onclick="openModal('Геймификация', '<p>Финансы как игра.</p><ul><li>Кэшбэк-квесты за покупки.</li><li>Округление покупок в копилку.</li><li>Уровни лояльности (Platinum, Gold).</li></ul>')">
         <div class="card" style="padding: 40px; border-color: var(--pink); cursor: pointer;">
           <h2 style="color: var(--pink); text-shadow: 0 0 20px var(--pink); margin-bottom: 20px;">Геймификация</h2>
           <p>Игровые механики повышают вовлеченность клиентов на <span class="highlight">40%</span>.</p>
@@ -235,15 +266,14 @@
     </div>
   </div>
 
-  <!-- НОВЫЕ СЛАЙДЫ -->
   <div class="slide" data-slide="9">
     <h2 class="anim-left d-1">Open Banking (Открытые API)</h2>
-    <p class="anim-left d-2">Банк перестает быть закрытой системой и интегрируется в повседневные сервисы.</p>
+    <p class="anim-left d-2">Банк перестает быть закрытой системой и интегрируется в сервисы.</p>
     <div class="grid">
-      <div class="card anim-up d-3" onclick="openModal('Экосистемы', '<p>Бесшовная интеграция с другими компаниями.</p><ul><li>Оплата такси прямо в банковском приложении.</li><li>Заказ доставки еды без перехода в другое приложение.</li><li>Оформление страховки в один клик.</li></ul>')">
-        <div class="icon" style="color: #00f0ff;">🔗</div><h3>Интеграция</h3><p>Связь банка с сервисами такси, доставки и маркетплейсов.</p><div class="hint-text">Нажми +</div>
+      <div class="card anim-up d-3 tilt" onclick="openModal('Экосистемы', '<p>Бесшовная интеграция с другими компаниями.</p><ul><li>Оплата такси прямо в банковском приложении.</li><li>Заказ доставки еды без перехода в другое приложение.</li><li>Оформление страховки в один клик.</li></ul>')">
+        <div class="icon" style="color: #00f0ff;">🔗</div><h3>Интеграция</h3><p>Связь банка с сервисами такси и маркетплейсов.</p><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-4" onclick="openModal('Агрегаторы', '<p>Управление финансами из разных банков в одном приложении.</p><ul><li>Вы видите все свои счета и вклады в одном месте.</li><li>Удобное планирование бюджета с учетом всех карт.</li></ul>')">
+      <div class="card anim-up d-4 tilt" onclick="openModal('Агрегаторы', '<p>Управление финансами из разных банков в одном приложении.</p><ul><li>Вы видите все свои счета и вклады в одном месте.</li><li>Удобное планирование бюджета с учетом всех карт.</li></ul>')">
         <div class="icon" style="color: #00f0ff;">📊</div><h3>Агрегация</h3><p>Все счета из разных банков в одном интерфейсе.</p><div class="hint-text">Нажми +</div>
       </div>
     </div>
@@ -254,7 +284,7 @@
       <div class="anim-left d-1">
         <h2>Кибербезопасность<br>и Антифрод</h2>
         <p>Банки используют поведенческий анализ и ИИ для защиты ваших денег в реальном времени.</p>
-        <div class="card" style="margin-top: 20px; cursor: pointer;" onclick="openModal('Как работает Антифрод', '<p>Система блокирует подозрительные операции за миллисекунды.</p><ul><li><strong>Поведенческий анализ:</strong> Банк знает, как быстро вы обычно печатаете пароль и как держите телефон. Если мошенник пытается войти, система это заметит.</li><li><strong>Геолокация:</strong> Покупка в другой стране за 5 минут после покупки дома — красный флаг.</li></ul>')">
+        <div class="card tilt" style="margin-top: 20px; cursor: pointer;" onclick="openModal('Как работает Антифрод', '<p>Система блокирует подозрительные операции за миллисекунды.</p><ul><li><strong>Поведенческий анализ:</strong> Банк знает, как быстро вы печатаете пароль. Если мошенник пытается войти, система это заметит.</li><li><strong>Геолокация:</strong> Покупка в другой стране за 5 минут после покупки дома — красный флаг.</li></ul>')">
           <h3 style="color: #00ff88;">Как это работает?</h3><div class="hint-text">Нажми +</div>
         </div>
       </div>
@@ -265,13 +295,13 @@
   <div class="slide" data-slide="11">
     <h2 class="anim-left d-1">Необанки и BNPL</h2>
     <div class="grid">
-      <div class="card anim-up d-2" onclick="openModal('Необанки', '<p>Банки без физических отделений.</p><ul><li>Вся работа через приложение.</li><li>Низкие комиссии за счет отсутствия офисов.</li><li>Быстрый выпуск карт.</li></ul>')">
+      <div class="card anim-up d-2 tilt" onclick="openModal('Необанки', '<p>Банки без физических отделений.</p><ul><li>Вся работа через приложение.</li><li>Низкие комиссии за счет отсутствия офисов.</li><li>Быстрый выпуск карт.</li></ul>')">
         <div class="icon" style="color: #ffbb00;">🏦</div><h3>Необанки</h3><p>Полностью цифровые банки без отделений.</p><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-3" onclick="openModal('BNPL (Купи сейчас, плати потом)', '<p>Разделение платежа на части без процентов.</p><ul><li>Популярно в e-commerce.</li><li>Вы получаете товар сразу, а платите 4 равными частями.</li><li>Банк зарабатывает на комиссии с магазина.</li></ul>')">
+      <div class="card anim-up d-3 tilt" onclick="openModal('BNPL (Купи сейчас, плати потом)', '<p>Разделение платежа на части без процентов.</p><ul><li>Популярно в e-commerce.</li><li>Вы получаете товар сразу, а платите 4 равными частями.</li><li>Банк зарабатывает на комиссии с магазина.</li></ul>')">
         <div class="icon" style="color: #ffbb00;">🛍️</div><h3>BNPL</h3><p>Покупки в рассрочку без переплат.</p><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-4" onclick="openModal('Подписочная модель', '<p>Банки предлагают премиум-подписки.</p><ul><li>Повышенный кэшбэк.</li><li>Бесплатные переводы и снятие наличных.</li><li>Страховки в подарок.</li></ul>')">
+      <div class="card anim-up d-4 tilt" onclick="openModal('Подписочная модель', '<p>Банки предлагают премиум-подписки.</p><ul><li>Повышенный кэшбэк.</li><li>Бесплатные переводы и снятие наличных.</li><li>Страховки в подарок.</li></ul>')">
         <div class="icon" style="color: #ffbb00;">💎</div><h3>Подписки</h3><p>Премиум-сервисы за ежемесячную плату.</p><div class="hint-text">Нажми +</div>
       </div>
     </div>
@@ -279,8 +309,8 @@
 
   <div class="slide" data-slide="12">
     <div class="split-layout">
-      <div class="anim-up d-1">
-        <div class="card" style="padding: 40px; border-color: var(--accent); cursor: pointer;" onclick="openModal('PFM (Personal Finance Management)', '<p>Инструменты для управления личным бюджетом.</p><ul><li><strong>Категоризация:</strong> Автоматическая сортировка трат на «Еду», «Транспорт» и т.д.</li><li><strong>Копилки:</strong> Автоматическое откладывание сдачи с каждой покупки.</li><li><strong>Аналитика:</strong> Графики расходов и предупреждения о перерасходе.</li></ul>')">
+      <div class="anim-up d-1 tilt">
+        <div class="card" style="padding: 40px; border-color: var(--accent); cursor: pointer;" onclick="openModal('PFM (Personal Finance Management)', '<p>Инструменты для управления личным бюджетом.</p><ul><li><strong>Категоризация:</strong> Автоматическая сортировка трат.</li><li><strong>Копилки:</strong> Автоматическое откладывание сдачи с каждой покупки.</li><li><strong>Аналитика:</strong> Графики расходов и предупреждения о перерасходе.</li></ul>')">
           <h2 style="color: var(--accent); margin-bottom: 20px;">Управление<br>Личными Финансами</h2>
           <p>Встроенные инструменты помогают клиентам копить и тратить с умом.</p>
           <div class="hint-text" style="margin-top: 20px;">Нажми +</div>
@@ -288,7 +318,7 @@
       </div>
       <div class="anim-left d-2">
         <h2>Финансовая<br>Грамотность</h2>
-        <p>Банки становятся финансовыми советниками, обучая клиентов инвестировать и планировать бюджет прямо в приложении.</p>
+        <p>Банки становятся советниками, обучая клиентов инвестировать и планировать бюджет прямо в приложении.</p>
       </div>
     </div>
   </div>
@@ -297,14 +327,12 @@
     <div class="split-layout">
       <div class="anim-left d-1">
         <h2>Цифровой Рубль<br>и CBDC</h2>
-        <p>Центральные банки по всему миру тестируют национальные цифровые валюты. Деньги переходят на блокчейн.</p>
-        <div class="card" style="margin-top: 20px; cursor: pointer;" onclick="openModal('Что такое CBDC?', '<p>Central Bank Digital Currency — цифровой аналог наличных.</p><ul><li>Эмитируется центральным банком.</li><li>Работает на блокчейне.</li><li><strong>Умные деньги:</strong> Можно программировать целевые траты (например, выплаты только на детское питание).</li></ul>')">
+        <p>Центральные банки тестируют национальные цифровые валюты. Деньги переходят на блокчейн.</p>
+        <div class="card tilt" style="margin-top: 20px; cursor: pointer;" onclick="openModal('Что такое CBDC?', '<p>Central Bank Digital Currency — цифровой аналог наличных.</p><ul><li>Эмитируется центральным банком.</li><li>Работает на блокчейне.</li><li><strong>Умные деньги:</strong> Можно программировать целевые траты (например, выплаты только на детское питание).</li></ul>')">
           <h3 style="color: var(--pink);">Будущее денег</h3><div class="hint-text">Нажми +</div>
         </div>
       </div>
-      <div class="anim-up d-2">
-        <div class="hexagon"><div class="hexagon-text">CBDC<br>₽</div></div>
-      </div>
+      <div class="anim-up d-2"><div class="hexagon"><div class="hexagon-text">CBDC<br>₽</div></div></div>
     </div>
   </div>
 
@@ -312,22 +340,90 @@
     <h2 class="anim-up d-1" style="text-align: center;">Зеленый Банкинг (ESG)</h2>
     <p class="anim-up d-2" style="text-align: center; margin: 0 auto 30px;">Экология становится важным фактором для клиентов и инвесторов.</p>
     <div class="grid">
-      <div class="card anim-up d-3" onclick="openModal('Эко-инициативы', '<p>Банки внедряют зеленые технологии.</p><ul><li>Отказ от бумажных чеков и выписок.</li><li>Виртуальные карты из переработанного пластика.</li><li>Отслеживание углеродного следа покупок.</li></ul>')">
+      <div class="card anim-up d-3 tilt" onclick="openModal('Эко-инициативы', '<p>Банки внедряют зеленые технологии.</p><ul><li>Отказ от бумажных чеков и выписок.</li><li>Виртуальные карты из переработанного пластика.</li><li>Отслеживание углеродного следа покупок.</li></ul>')">
         <div class="icon" style="color: #00ff88;">🌱</div><h3>Эко-карты</h3><p>Снижение углеродного следа.</p><div class="hint-text">Нажми +</div>
       </div>
-      <div class="card anim-up d-4" onclick="openModal('Зеленые инвестиции', '<p>Инвестирование в экологические проекты.</p><ul><li>Фонды возобновляемой энергии.</li><li>Клиенты могут выбирать, на что пойдут их деньги.</li></ul>')">
+      <div class="card anim-up d-4 tilt" onclick="openModal('Зеленые инвестиции', '<p>Инвестирование в экологические проекты.</p><ul><li>Фонды возобновляемой энергии.</li><li>Клиенты могут выбирать, на что пойдут их деньги.</li></ul>')">
         <div class="icon" style="color: #00ff88;">🌍</div><h3>Инвестиции</h3><p>Вложения в чистую энергетику.</p><div class="hint-text">Нажми +</div>
       </div>
     </div>
   </div>
 
+  <!-- ===== НОВЫЕ 5 СЛАЙДОВ ===== -->
   <div class="slide" data-slide="15">
+    <div class="split-layout">
+      <div class="anim-left d-1">
+        <h2>Интернет Вещей (IoT)<br>и Умный дом</h2>
+        <p>Банк интегрируется в вашу бытовую технику. Холодильник сам заказывает продукты, а машина оплачивает заправку.</p>
+        <div class="card tilt" style="margin-top: 20px; cursor: pointer;" onclick="openModal('Оплата без рук', '<p>Устройства общаются с банком напрямую.</p><ul><li><strong>Автоплатежи:</strong> Автомобиль на электрозаправке списывает деньги за зарядку.</li><li><strong>Умный холодильник:</strong> Отслеживает продукты и заказывает доставку через банковское API.</li><li><strong>Голосовые колонки:</strong> Управление счетами через Алису или Siri.</li></ul>')">
+          <h3 style="color: var(--accent);">Как это работает?</h3><div class="hint-text">Нажми +</div>
+        </div>
+      </div>
+      <div class="anim-up d-2">
+        <div class="glowing-circle" style="border-color: var(--pink);"><div class="glowing-circle-inner" style="background: radial-gradient(circle, var(--pink), transparent);">📡</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-slide="16">
+    <h2 class="anim-left d-1">Банки в Метавселенной</h2>
+    <div class="grid">
+      <div class="card anim-up d-2 tilt" onclick="openModal('Виртуальные отделения', '<p>Посещение банка в VR-очках.</p><ul><li>Консультация с аватаром-оператором.</li><li>Визуализация ваших инвестиций в 3D.</li><li>Покупка цифровых активов (NFT).</li></ul>')">
+        <div class="icon" style="color: #b33cff;">🥽</div><h3>VR-отделения</h3><p>Консультации в виртуальной реальности.</p><div class="hint-text">Нажми +</div>
+      </div>
+      <div class="card anim-up d-3 tilt" onclick="openModal('Web3 и Криптовалюты', '<p>Банки интегрируют блокчейн-кошельки.</p><ul><li>Хранение NFT и криптовалют на одном счету с рублями.</li><li>Залог криптовалюты для получения фиатного кредита.</li></ul>')">
+        <div class="icon" style="color: #b33cff;">🌐</div><h3>Web3 Кошельки</h3><p>Криптовалюта и рубли в одном приложении.</p><div class="hint-text">Нажми +</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-slide="17">
+    <div class="split-layout">
+      <div class="anim-up d-1">
+        <div class="card" style="padding: 40px; border-color: #00f0ff; cursor: pointer;" onclick="openModal('Робо-эдвайзинг', '<p>ИИ управляет вашим портфелем.</p><ul><li><strong>Автоматическая ребалансировка:</strong> Алгоритм продает подорожавшие активы и покупает подешевевшие.</li><li>Низкий порог входа (можно начать с 1000 рублей).</li><li>Комиссия робота в 3 раза ниже, чем у живого трейдера.</li></ul>')">
+          <h2 style="color: #00f0ff; margin-bottom: 20px;">Робо-эдвайзинг</h2>
+          <p>Алгоритмы заменяют инвестиционных советников. Бот сам собирает портфель акций и облигаций под ваш риск-профиль.</p>
+          <div class="hint-text" style="margin-top: 20px;">Нажми +</div>
+        </div>
+      </div>
+      <div class="anim-left d-2">
+        <h2>ИИ-Инвестиции</h2>
+        <p>Больше не нужно быть экспертом. Искусственный интеллект анализирует рынок 24/7 и принимает решения за вас.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-slide="18">
+    <h2 class="anim-left d-1">Токенизация Активов</h2>
+    <p class="anim-left d-2">Превращение недвижимости, искусства и акций в цифровые токены на блокчейне.</p>
+    <div class="grid">
+      <div class="card anim-up d-3 tilt" onclick="openModal('Дробление активов', '<p>Покупка части дорогого объекта.</p><ul><li>Вы можете купить 1% от квартиры в Москве или 0.1% акции Apple.</li><li>Токены можно продать в любой момент за секунды.</li><li>Высокая ликвидность.</li></ul>')">
+        <div class="icon" style="color: var(--gold);">🏢</div><h3>Дробление</h3><p>Инвестиции в недвижимость с 1000 рублей.</p><div class="hint-text">Нажми +</div>
+      </div>
+      <div class="card anim-up d-4 tilt" onclick="openModal('Цифровое искусство', '<p>Инвестиции в NFT.</p><ul><li>Банки выступают гарантами подлинности цифровых картин.</li><li>Возможность получать роялти с перепродаж.</li></ul>')">
+        <div class="icon" style="color: var(--gold);">🎨</div><h3>NFT-искусство</h3><p>Безопасные инвестиции в цифровое искусство.</p><div class="hint-text">Нажми +</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-slide="19">
+    <div class="center-content">
+      <h2 class="anim-up d-1" style="color: #ff4444; text-shadow: 0 0 30px rgba(255,68,68,0.5);">Глобализация</h2>
+      <h1 class="anim-up d-2" style="font-size: clamp(2rem, 4vw, 3.5rem); background: linear-gradient(90deg, #ff4444, #ff8c00); -webkit-background-clip: text;">Банк без Границ</h1>
+      <p class="anim-up d-3">Трансграничные платежи в реальном времени. Вы в России, покупаете кофе в Нью-Йорке — деньги списываются за 3 секунды по лучшему курсу.</p>
+      <div class="card anim-up d-4 tilt" style="margin-top: 30px; max-width: 600px; text-align: left;" onclick="openModal('Трансграничные переводы', '<p>Blockchain и SWIFT GPI ускоряют переводы.</p><ul><li>Ранее перевод в другую страну занимал 3-5 дней, теперь — минуты.</li><li>Прозрачный курс без скрытых комиссий.</li><li>ИИ автоматически подбирает самый выгодный маршрут конвертации.</li></ul>')">
+        <h3 style="font-size: 1.2rem;">Как ускорили платежи?</h3><div class="hint-text">Нажми, чтобы узнать больше +</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-slide="20">
     <div class="center-content">
       <div class="subtitle anim-up d-1">Итоги</div>
       <h1 class="anim-up d-2" style="font-size: clamp(2rem, 5vw, 4rem);">Будущее уже<br>наступило</h1>
       <p class="anim-up d-3">Банкинг больше не про здания. Это про технологии, данные и удобство. Спасибо за внимание!</p>
       <div class="anim-up d-4" style="margin-top: 40px;">
-        <button class="btn" style="width: 200px; border-radius: 30px; font-size: 1rem; font-weight: bold; background: var(--primary); border: none;" onclick="changeSlide(-15)">Начать сначала</button>
+        <button class="btn" style="width: 200px; border-radius: 30px; font-size: 1rem; font-weight: bold; background: var(--primary); border: none;" onclick="changeSlide(-20)">Начать сначала</button>
       </div>
     </div>
   </div>
@@ -348,6 +444,7 @@
 </div>
 
 <script>
+  // === МОДАЛЬНОЕ ОКНО ===
   const modal = document.getElementById('infoModal');
   const modalTitle = document.getElementById('modalTitle');
   const modalText = document.getElementById('modalText');
@@ -357,6 +454,7 @@
   }
   function closeModal(e) { if (e) e.stopPropagation(); modal.classList.remove('active'); }
 
+  // === ПЕРЕКЛЮЧЕНИЕ СЛАЙДОВ ===
   let currentSlide = 0;
   const slides = document.querySelectorAll('.slide');
   const progress = document.getElementById('progress');
@@ -410,10 +508,33 @@
 
   updateUI();
 
+  // === 3D-ЭФФЕКТ ДЛЯ КАРТОЧЕК (TILT) ===
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -10;
+      const rotateY = ((x - centerX) / centerX) * 10;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
+    });
+  });
+
+  // === КОСМИЧЕСКАЯ НЕЙРОСЕТЬ ===
   const canvas = document.getElementById('bg');
   const ctx = canvas.getContext('2d');
   let W, H, particles = [];
-  const mouse = { x: null, y: null, radius: 150 };
+  const mouse = { x: null, y: null, radius: 180 };
 
   window.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
   window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
@@ -443,7 +564,7 @@
     draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = 'rgba(0, 240, 255, 0.8)'; ctx.fill(); }
   }
 
-  for (let i = 0; i < 100; i++) particles.push(new Particle());
+  for (let i = 0; i < 120; i++) particles.push(new Particle());
 
   function animateBg() {
     ctx.clearRect(0, 0, W, H);
